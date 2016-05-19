@@ -1,27 +1,7 @@
 import pygame
-
+import Graphing
 from World import World
 
-
-# class Thing:
-#
-#     def __init__(self, xy, col):
-#         super().__init__()
-#         self.x, self.y = xy
-#         self.width = 200
-#         self.height = 200
-#         self.colour = col
-#         self.momentum = (0,0)
-#
-#
-#
-#     def draw(self, display):
-#         pygame.draw.rect(display, BLACK, (self.x ,self.y, self.width, self.height), 0)
-#
-#     def move(self):
-#         offsetX, offsetY = self.momentum
-#         self.x += offsetX
-#         self.y += offsetY
 
 #############
 
@@ -39,7 +19,7 @@ pygame.display.set_caption("My Game!")
 clock = pygame.time.Clock()
 
 ## game objects
-width_height = (15,15)
+width_height = (50,50)
 
 initBonkCount = 20
 initZapCount = 5
@@ -48,18 +28,23 @@ world = World(width_height, initBonkCount, initZapCount, (displayWidth, displayH
 
 cycleCount = 0
 
-cyclesPerSecond = 1
+cyclesPerSecond = 20
 ###########################
 
+bonkFpsData = [[],[], []]
+
 crashed = False
-while not crashed:
-     ## event handling
+while cycleCount < 50 and not crashed:
+    ## event handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             crashed = True
 
-                ## logic
+    ## logic
+    start = pygame.time.get_ticks()
     world.performCycle(cycleCount)
+    timeTook = pygame.time.get_ticks() - start
+    print("Cycle " + str(cycleCount)+ ": took " + str(timeTook) + "ms")
     ## draw stuff
     gameDisplay.fill(WHITE)
     world.draw(gameDisplay)
@@ -68,8 +53,29 @@ while not crashed:
     clock.tick(cyclesPerSecond) ## 1 cycle per second
     cycleCount += 1
 
+    bonkFpsData[0].append(cycleCount)
+    bonkFpsData[1].append(timeTook)
+    bonkFpsData[2].append(world.bonkTotal)
+
+gameDisplay.fill(WHITE)
+
+Graphing.graphData(bonkFpsData, gameDisplay, width_height)
+
+pygame.display.flip()  ## redraw screen
+clock.tick(cyclesPerSecond)  ## 1 cycle per second
+
+while not crashed:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            crashed = True
 
 
 pygame.quit()
+
+
+
+
+
+
 
 quit()

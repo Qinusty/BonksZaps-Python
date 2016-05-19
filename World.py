@@ -37,38 +37,37 @@ class World:
             if (not bonksComplete) and (not zapsComplete):
                 ## bonk or zap
                 if (rand.randint(0,1) == 0):
-                    self.randomlyPlaceBeing(Bonk)
+                    self.randomlyPlaceBeing(Bonk, 0)
                     bonksCreated += 1
                 else:
-                    self.randomlyPlaceBeing(Zap)
+                    self.randomlyPlaceBeing(Zap, 0)
                     zapsCreated += 1
             elif bonksComplete:
-                self.randomlyPlaceBeing(Zap)
+                self.randomlyPlaceBeing(Zap, 0)
                 zapsCreated += 1
             elif zapsComplete: ## zaps complete
-                self.randomlyPlaceBeing(Bonk)
+                self.randomlyPlaceBeing(Bonk, 0)
                 bonksCreated += 1
 
     def performCycle(self, cycleCount):
         for col in self.grid:
             for room in col:
-                for being in room.beings:
-                    being.act(cycleCount)
+                room.performCycle(cycleCount)
 
-        self.randomlyPlaceBeing(Bonk)
+        self.randomlyPlaceBeing(Bonk, cycleCount)
         self.bonkTotal += 1
 
-    def randomlyPlaceBeing(self, T):
+    def randomlyPlaceBeing(self, T, currentCycle):
         x = rand.randint(0, (self.size[0] - 1))
         y = rand.randint(0, (self.size[1] - 1))
         if T == Bonk:
             self.grid[x][y].addBeing(Bonk("B" + str(self.bonkTotal),
                                           rand.choice([True, False]),
-                                          self.grid[x][y], 0))
+                                          self.grid[x][y], 0), currentCycle)
             self.bonkTotal += 1
         elif T == Zap:
             self.grid[x][y].addBeing(Zap("Z" + str(self.zapTotal),
-                                         self.grid[x][y], 0))
+                                         self.grid[x][y], 0), currentCycle)
             self.zapTotal += 1
 
     def draw(self, display):
