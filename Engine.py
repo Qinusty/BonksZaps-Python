@@ -8,6 +8,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--bonks", type=int, default=20)
 parser.add_argument("--zaps", type=int, default=5)
 parser.add_argument("--cycles", type=int, default=50)
+parser.add_argument("--width", type=int, default=50)
+parser.add_argument("--height", type=int, default=50)
+parser.add_argument("--fps", type=int, default=20)
 args = parser.parse_args()
 
 #############
@@ -26,7 +29,7 @@ pygame.display.set_caption("My Game!")
 clock = pygame.time.Clock()
 
 ## game objects
-width_height = (50,50)
+width_height = (args.width,args.height)
 
 initBonkCount = args.bonks
 initZapCount = args.zaps
@@ -35,7 +38,7 @@ world = World(width_height, initBonkCount, initZapCount, (displayWidth, displayH
 
 cycleCount = 0
 
-cyclesPerSecond = 20
+cyclesPerSecond = args.fps
 ###########################
 
 bonkFpsData = [[],[], []]
