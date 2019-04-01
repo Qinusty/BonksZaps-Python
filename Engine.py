@@ -54,7 +54,7 @@ while cycleCount < args.cycles and not crashed:
     start = pygame.time.get_ticks()
     world.performCycle(cycleCount)
     timeTook = pygame.time.get_ticks() - start
-    print("Cycle " + str(cycleCount)+ ": took " + str(timeTook) + "ms")
+    print("Cycle {} ({} bonks): took {}ms ".format(str(cycleCount), world.bonkTotal, str(timeTook)))
     ## draw stuff
     gameDisplay.fill(WHITE)
     world.draw(gameDisplay)
