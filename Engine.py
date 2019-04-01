@@ -1,7 +1,14 @@
 import pygame
 import Graphing
 from World import World
+import argparse
 
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--bonks", type=int, default=20)
+parser.add_argument("--zaps", type=int, default=5)
+parser.add_argument("--cycles", type=int, default=50)
+args = parser.parse_args()
 
 #############
 
@@ -21,8 +28,8 @@ clock = pygame.time.Clock()
 ## game objects
 width_height = (50,50)
 
-initBonkCount = 20
-initZapCount = 5
+initBonkCount = args.bonks
+initZapCount = args.zaps
 
 world = World(width_height, initBonkCount, initZapCount, (displayWidth, displayHeight))
 
@@ -34,7 +41,7 @@ cyclesPerSecond = 20
 bonkFpsData = [[],[], []]
 
 crashed = False
-while cycleCount < 50 and not crashed:
+while cycleCount < args.cycles and not crashed:
     ## event handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -71,11 +78,4 @@ while not crashed:
 
 
 pygame.quit()
-
-
-
-
-
-
-
 quit()
